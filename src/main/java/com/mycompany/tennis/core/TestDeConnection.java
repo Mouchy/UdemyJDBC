@@ -1,7 +1,6 @@
 package com.mycompany.tennis.core;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -12,7 +11,12 @@ public class TestDeConnection {
         Connection conn = null;
         try {
         	MysqlDataSource dataSource = new MysqlDataSource();
-        	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
+        	//dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
+        	
+        	dataSource.setServerName("localhost");
+        	dataSource.setPort(3306);
+        	dataSource.setDatabaseName("tennis");
+        	dataSource.setUseSSL(false);
         	dataSource.setUser("DBCOURS");
         	dataSource.setPassword("DBCOURS");
         	
