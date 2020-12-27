@@ -16,13 +16,16 @@ public class TestDeConnection {
             //MySQL driver MySQL Connector
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris","manu","xevrod2x");
             Statement statement = conn.createStatement();
-            ResultSet rs = statement.executeQuery("SELECT NOM, PRENOM, ID FROM JOUEUR");
+            ResultSet rs = statement.executeQuery("SELECT NOM, PRENOM, ID FROM JOUEUR where ID = 12");
             
-            while (rs.next()) {
+            if (rs.next()) {
                 final String nom = rs.getString("NOM");
                 final String prenom = rs.getString("PRENOM");
                 final Long id = rs.getLong("ID");
                 System.out.println("Le joueur  / la joueuse représenté par le numéro " +id+" est "+prenom+" "+nom);
+            }
+            else {
+            	System.out.println("Il n'y a pas d'enregistrement d'ID 12");
             }
             
             System.out.println("success");
