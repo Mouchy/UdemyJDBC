@@ -4,20 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
+
 
 public class TestDeConnection {
     public static void main(String... args){
         Connection conn = null;
         try {
-        	MysqlDataSource dataSource = new MysqlDataSource();
-        	//dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
+        	BasicDataSource dataSource = new BasicDataSource();
+        	dataSource.setInitialSize(5);
+        	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
         	
-        	dataSource.setServerName("localhost");
-        	dataSource.setPort(3306);
-        	dataSource.setDatabaseName("tennis");
-        	dataSource.setUseSSL(false);
-        	dataSource.setUser("DBCOURS");
+        	dataSource.setUsername("DBCOURS");
         	dataSource.setPassword("DBCOURS");
         	
         	conn = dataSource.getConnection();
