@@ -14,20 +14,38 @@ public class TestDeConnection {
             
             //MySQL driver MySQL Connector
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris","DBCOURS","DBCOURS");
-            PreparedStatement preparedStatement = conn.prepareStatement("update JOUEUR SET NOM = ?, PRENOM = ? WHERE ID = ?");
-            long identifiant  = 24L;
-            String nom = "Errani";
-            String prenom = "Sara";
+            conn.setAutoCommit(false);
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO JOUEUR (NOM, PRENOM, SEXE) VALUES (?, ?, ?)");
+           
+            String nom    = "Capriati";
+            String prenom = "Jennifer";
+            String sexe   = "F";
             preparedStatement.setString(1, nom);
             preparedStatement.setString(2, prenom);
-            preparedStatement.setLong(3, identifiant);
+            preparedStatement.setString(3, sexe);
            
-            int nbEnregistrementsModifies = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
             
-            System.out.println("Nombre d'enregistrements modifiés="+nbEnregistrementsModifies);
+            nom    = "Johannson";
+            prenom = "Thomas";
+            sexe   = "H";
+            preparedStatement.setString(1, nom);
+            preparedStatement.setString(2, prenom);
+            preparedStatement.setString(3, sexe);
+           
+            preparedStatement.executeUpdate();
+            
+            conn.commit();
+            
+
             System.out.println("success");
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+            	if (conn!=null) conn.rollback();
+            } catch (SQLException e1) {
+                e.printStackTrace();
+            }
         }
         finally {
             try {
