@@ -7,8 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import javax.sql.DataSource;
 
+import com.mycompany.tennis.core.DataSourceProvider;
 import com.mycompany.tennis.core.entity.Joueur;
 
 public class JoueurRepositoryImpl {
@@ -16,12 +17,7 @@ public class JoueurRepositoryImpl {
 	public void create(Joueur joueur) {
 		Connection conn = null;
         try {
-        	BasicDataSource dataSource = new BasicDataSource();
-        	dataSource.setInitialSize(5);
-        	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
-        	
-        	dataSource.setUsername("DBCOURS");
-        	dataSource.setPassword("DBCOURS");
+        	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
         	
         	conn = dataSource.getConnection();
 
@@ -56,12 +52,7 @@ public class JoueurRepositoryImpl {
 	public void update(Joueur joueur) {
 		Connection conn = null;
 	    try {
-	    	BasicDataSource dataSource = new BasicDataSource();
-	    	dataSource.setInitialSize(5);
-	    	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
-	    	
-	    	dataSource.setUsername("DBCOURS");
-	    	dataSource.setPassword("DBCOURS");
+	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
 	    	
 	    	conn = dataSource.getConnection();
 	
@@ -97,12 +88,7 @@ public class JoueurRepositoryImpl {
 	public void delete(Long id) {
 		Connection conn = null;
 	    try {
-	    	BasicDataSource dataSource = new BasicDataSource();
-	    	dataSource.setInitialSize(5);
-	    	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
-	    	
-	    	dataSource.setUsername("DBCOURS");
-	    	dataSource.setPassword("DBCOURS");
+	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
 	    	
 	    	conn = dataSource.getConnection();
 	
@@ -136,12 +122,7 @@ public class JoueurRepositoryImpl {
 		Connection conn = null;
 		Joueur joueur = null;
 	    try {
-	    	BasicDataSource dataSource = new BasicDataSource();
-	    	dataSource.setInitialSize(5);
-	    	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
-	    	
-	    	dataSource.setUsername("DBCOURS");
-	    	dataSource.setPassword("DBCOURS");
+	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
 	    	
 	    	conn = dataSource.getConnection();
 	
@@ -184,12 +165,7 @@ public class JoueurRepositoryImpl {
 		Connection conn = null;
 		List<Joueur> joueurs = new ArrayList<>();
 	    try {
-	    	BasicDataSource dataSource = new BasicDataSource();
-	    	dataSource.setInitialSize(5);
-	    	dataSource.setUrl("jdbc:mysql://localhost:3306/tennis?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Europe/Paris");
-	    	
-	    	dataSource.setUsername("DBCOURS");
-	    	dataSource.setPassword("DBCOURS");
+	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
 	    	
 	    	conn = dataSource.getConnection();
 	
