@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,13 +22,19 @@ public class JoueurRepositoryImpl {
         	
         	conn = dataSource.getConnection();
 
-            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO JOUEUR (NOM, PRENOM, SEXE) VALUES (?, ?, ?)");
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO JOUEUR (NOM, PRENOM, SEXE) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, joueur.getNom());
             preparedStatement.setString(2, joueur.getPrenom());
             preparedStatement.setString(3, joueur.getSexe().toString());
            
             preparedStatement.executeUpdate();
+            
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            
+            if (rs.next()) {
+            	joueur.setId(rs.getLong(1));
+            }
             
             System.out.println("Joueur créé");
         } catch (SQLException e) {
