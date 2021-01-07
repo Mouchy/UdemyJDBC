@@ -10,50 +10,36 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.mycompany.tennis.core.DataSourceProvider;
+import com.mycompany.tennis.core.HibernateUtil;
 import com.mycompany.tennis.core.entity.Joueur;
+import com.mycompany.tennis.core.entity.Tournoi;
 
 public class JoueurRepositoryImpl {
 
 	public void create(Joueur joueur) {
-		Connection conn = null;
-        try {
-        	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-        	
-        	conn = dataSource.getConnection();
-
-            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO JOUEUR (NOM, PRENOM, SEXE) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-
-            preparedStatement.setString(1, joueur.getNom());
-            preparedStatement.setString(2, joueur.getPrenom());
-            preparedStatement.setString(3, joueur.getSexe().toString());
-           
-            preparedStatement.executeUpdate();
-            
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            
-            if (rs.next()) {
-            	joueur.setId(rs.getLong(1));
-            }
-            
-            System.out.println("Joueur créé");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-            	if (conn!=null) conn.rollback();
-            } catch (SQLException e1) {
-                e.printStackTrace();
-            }
-        }
-        finally {
-            try {
-                if (conn!=null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+		Session session=null;
+		Transaction tx=null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			session.persist(joueur);
+			tx.commit();
+			System.out.println("joueur créé");
+		} catch (Exception e) {
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
     }
 	
 	public void update(Joueur joueur) {
@@ -93,79 +79,19 @@ public class JoueurRepositoryImpl {
 	}
 	
 	public void delete(Long id) {
-		Connection conn = null;
-	    try {
-	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-	    	
-	    	conn = dataSource.getConnection();
-	
-	        PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM JOUEUR WHERE ID = ?");
-	
-	        preparedStatement.setLong(1, id);
-	       
-	        preparedStatement.executeUpdate();
-	        
-	        System.out.println("Joueur suprimé");
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        try {
-	        	if (conn!=null) conn.rollback();
-	        } catch (SQLException e1) {
-	            e.printStackTrace();
-	        }
-	    }
-	    finally {
-	        try {
-	            if (conn!=null) {
-	                conn.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		Joueur joueur = new Joueur();
+		joueur.setId(id);
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.delete(joueur);
+		System.out.println("Tournoi effacer");
 	}
 	
 	public Joueur getById(Long id) {
-		Connection conn = null;
-		Joueur joueur = null;
-	    try {
-	    	DataSource dataSource = DataSourceProvider.getSingleDataSourceInstance();
-	    	
-	    	conn = dataSource.getConnection();
-	
-	        PreparedStatement preparedStatement = conn.prepareStatement("SELECT NOM, PRENOM, SEXE FROM JOUEUR WHERE ID = ?");
-	
-	        preparedStatement.setLong(1, id);
-	       
-	        ResultSet rs = preparedStatement.executeQuery();
-	        
-	        if (rs.next()) {
-	        	joueur = new Joueur();
-	        	joueur.setId(id);
-	        	joueur.setNom(rs.getString("NOM"));
-	        	joueur.setPrenom(rs.getString("PRENOM"));
-	        	joueur.setSexe(rs.getString("SEXE").charAt(0));
-	        }
-	        
-	        System.out.println("Joueur lu");
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        try {
-	        	if (conn!=null) conn.rollback();
-	        } catch (SQLException e1) {
-	            e.printStackTrace();
-	        }
-	    }
-	    finally {
-	        try {
-	            if (conn!=null) {
-	                conn.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return joueur;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Joueur joueur = session.get(Joueur.class, id);
+		System.out.println("Joueur lu");
+		
+		return joueur;
 	}
 	
 	public List<Joueur> list() {
