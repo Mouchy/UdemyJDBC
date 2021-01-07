@@ -12,10 +12,12 @@ public class JoueurRepositoryImpl {
 	public void renomme(Long id, String nouveauNom) {
 		Joueur 		joueur	=null;
 		Session 	session	=null;
+	
 		session = HibernateUtil.getSessionFactory().getCurrentSession();
 		joueur = session.get(Joueur.class, id);
 		joueur.setNom(nouveauNom);
 		System.out.println("Nom du Joueur modifié");
+		
 	}
 	
 	public void create(Joueur joueur) {
@@ -25,7 +27,8 @@ public class JoueurRepositoryImpl {
 		session.persist(joueur);
 		System.out.println("joueur créé");
     }
-
+	
+	
 	
 	public void delete(Long id) {
 		Joueur joueur = new Joueur();

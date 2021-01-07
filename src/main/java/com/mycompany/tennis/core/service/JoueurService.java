@@ -17,7 +17,7 @@ public class JoueurService {
 	}
 	
 	public void renomme(Long id, String nouveauNom) {
-		
+		Joueur joueur=getJoueur(id);
 		Session session=null;
 		Transaction tx=null;
 		try {
@@ -25,8 +25,11 @@ public class JoueurService {
 			/* J'aurais du faire un openSession dans le code précédent */
 			session=HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
-			Joueur joueur=joueurRepository.getById(id);
 			joueur.setNom(nouveauNom);
+			
+			/* Joueur 2 est l'objet persistent que l'on récupére du merge
+			 *  et joueur est l'objet détaché que l'on a mergé*/
+			Joueur joueur2 = (Joueur)session.merge(joueur);
 			tx.commit();
 		}
 		catch (Exception e){
@@ -50,7 +53,7 @@ public class JoueurService {
 			/* J'aurais du faire un openSession dans le code précédent */
 			session=HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
-			joueurRepository.create(joueur);
+			joueur=joueurRepository.create(joueur);
 			tx.commit();
 		}
 		catch (Exception e){
