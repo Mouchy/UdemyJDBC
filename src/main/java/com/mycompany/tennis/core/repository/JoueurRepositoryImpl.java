@@ -44,24 +44,10 @@ public class JoueurRepositoryImpl {
 	
 	public void create(Joueur joueur) {
 		Session session=null;
-		Transaction tx=null;
-		try {
-			session = HibernateUtil.getSessionFactory().getCurrentSession();
-			tx=session.beginTransaction();
-			session.persist(joueur);
-			tx.commit();
-			System.out.println("joueur créé");
-		} catch (Exception e) {
-			if (tx!=null) {
-				tx.rollback();
-			}
-			e.printStackTrace();
-		}
-		finally {
-			if (session!=null) {
-				session.close();
-			}
-		}
+	
+		session = HibernateUtil.getSessionFactory().getCurrentSession();
+		session.persist(joueur);
+		System.out.println("joueur créé");
     }
 	
 	public void update(Joueur joueur) {
@@ -111,18 +97,9 @@ public class JoueurRepositoryImpl {
 	public Joueur getById(Long id) {
 		Joueur joueur=null;
 		Session session=null;
-		try {
-			session = HibernateUtil.getSessionFactory().getCurrentSession();
-			joueur = session.get(Joueur.class, id);
-			System.out.println("Joueur lu");
-		} catch (Throwable t) {
-		        t.printStackTrace();
-		}
-		finally {
-			if (session!=null) {
-				session.close();
-		    }
-		}
+		session = HibernateUtil.getSessionFactory().getCurrentSession();
+		joueur = session.get(Joueur.class, id);
+		System.out.println("Joueur lu");
 		
 		return joueur;
 	}

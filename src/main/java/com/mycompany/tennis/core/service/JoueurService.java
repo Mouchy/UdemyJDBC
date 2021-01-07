@@ -17,11 +17,53 @@ public class JoueurService {
 	}
 	
 	public void renomme(Long id, String nouveauNom) {
-		joueurRepository.renomme(id, nouveauNom);
+		
+		Session session=null;
+		Transaction tx=null;
+		try {
+			/*session=HibernateUtil.getSessionFactory().openSession();*/
+			/* J'aurais du faire un openSession dans le code précédent */
+			session=HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			Joueur joueur=joueurRepository.getById(id);
+			joueur.setNom(nouveauNom);
+			tx.commit();
+		}
+		catch (Exception e){
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
 	}
 	
 	public void createJoueur(Joueur joueur) {
-		joueurRepository.create(joueur);
+		Session session=null;
+		Transaction tx=null;
+		try {
+			/*session=HibernateUtil.getSessionFactory().openSession();*/
+			/* J'aurais du faire un openSession dans le code précédent */
+			session=HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			joueurRepository.create(joueur);
+			tx.commit();
+		}
+		catch (Exception e){
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
 	}
 	
 	public Joueur getJoueur(Long id) {
@@ -29,12 +71,14 @@ public class JoueurService {
 		Transaction tx=null;
 		Joueur joueur=null;
 		try {
+			/*session=HibernateUtil.getSessionFactory().openSession();*/
+			/* J'aurais du faire un openSession dans le code précédent */
 			session=HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
 			joueur=joueurRepository.getById(id);
 			tx.commit();
 		}
-		catch (Exception e) {
+		catch (Exception e){
 			if (tx!=null) {
 				tx.rollback();
 			}
