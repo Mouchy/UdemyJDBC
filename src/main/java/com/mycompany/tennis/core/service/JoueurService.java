@@ -16,6 +16,10 @@ public class JoueurService {
 		this.joueurRepository = new JoueurRepositoryImpl();
 	}
 	
+	public void renomme(Long id, String nouveauNom) {
+		joueurRepository.renomme(id, nouveauNom);
+	}
+	
 	public void createJoueur(Joueur joueur) {
 		joueurRepository.create(joueur);
 	}

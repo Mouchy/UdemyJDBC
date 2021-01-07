@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +15,33 @@ import org.hibernate.Transaction;
 import com.mycompany.tennis.core.DataSourceProvider;
 import com.mycompany.tennis.core.HibernateUtil;
 import com.mycompany.tennis.core.entity.Joueur;
-import com.mycompany.tennis.core.entity.Tournoi;
 
 public class JoueurRepositoryImpl {
 
+	public void renomme(Long id, String nouveauNom) {
+		Joueur 		joueur	=null;
+		Session 	session	=null;
+		Transaction tx		=null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			joueur = session.get(Joueur.class, id);
+			joueur.setNom(nouveauNom);
+			tx.commit();
+			System.out.println("Nom du Joueur modifié");
+		} catch (Exception e) {
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
+	}
+	
 	public void create(Joueur joueur) {
 		Session session=null;
 		Transaction tx=null;
@@ -87,9 +109,20 @@ public class JoueurRepositoryImpl {
 	}
 	
 	public Joueur getById(Long id) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		Joueur joueur = session.get(Joueur.class, id);
-		System.out.println("Joueur lu");
+		Joueur joueur=null;
+		Session session=null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			joueur = session.get(Joueur.class, id);
+			System.out.println("Joueur lu");
+		} catch (Throwable t) {
+		        t.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+		    }
+		}
 		
 		return joueur;
 	}
