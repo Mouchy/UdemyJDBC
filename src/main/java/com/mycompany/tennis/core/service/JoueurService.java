@@ -53,7 +53,7 @@ public class JoueurService {
 			/* J'aurais du faire un openSession dans le code précédent */
 			session=HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
-			joueur=joueurRepository.create(joueur);
+			joueurRepository.create(joueur);
 			tx.commit();
 		}
 		catch (Exception e){
