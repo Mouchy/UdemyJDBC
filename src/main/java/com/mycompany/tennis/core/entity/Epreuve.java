@@ -1,6 +1,7 @@
 package com.mycompany.tennis.core.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
 
@@ -8,6 +9,7 @@ public class Epreuve {
 	private Long      id;
 	@Type(type="short")
 	private short     annee;
+	@Transient
 	private Tournoi   tournoi;
 	@Column(name="TYPE_EPREUVE", nullable = true, length=2000)
 	private Character typeEpreuve;
