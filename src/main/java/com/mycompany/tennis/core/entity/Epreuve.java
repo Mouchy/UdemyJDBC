@@ -2,12 +2,15 @@ package com.mycompany.tennis.core.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+
+
 @Entity
 @Table(name = "EPREUVE")
 public class Epreuve {
@@ -15,7 +18,7 @@ public class Epreuve {
 	private Long      id;
 	@Type(type="short")
 	private short     annee;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="ID_TOURNOI")
 	private Tournoi   tournoi;
 	@Column(name="TYPE_EPREUVE", nullable = true, length=2000)
