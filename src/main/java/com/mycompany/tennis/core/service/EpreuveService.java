@@ -2,6 +2,9 @@ package com.mycompany.tennis.core.service;
 
 
 
+import java.util.Scanner;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -16,15 +19,17 @@ public class EpreuveService {
     public EpreuveService() {
     	this.epreuveRepository=new EpreuveRepositoryImpl();
     }
-	public Epreuve getEpreuve(Long id) {
-		Session session=null;
-		Transaction tx=null;
-		Epreuve epreuve=null;
+    
+    
+    public Epreuve getEpreuveAvecTournoi(Long id) {
+		Session session= null;
+		Transaction tx = null;
+		Epreuve epreuve = null;
 		try {
-			session=HibernateUtil.getSessionFactory().getCurrentSession();
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
 			epreuve=epreuveRepository.getById(id);
-			System.out.println("L'epreuve selectionné se deroule en "+epreuve.getAnnee()+" Et il s'agit du tournoi"+epreuve.getTournoi().getNom());
+			Hibernate.initialize(epreuve.getTournoi());
 			tx.commit();
 		}
 		catch (Exception e) {
@@ -39,7 +44,35 @@ public class EpreuveService {
 			}
 		}
 		return epreuve;
-    }
+	}
+    
+    
+    
+    
+    public Epreuve getEpreuveSansTournoi(Long id) {
+		Session session= null;
+		Transaction tx = null;
+		Epreuve epreuve = null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			epreuve=epreuveRepository.getById(id);
+			tx.commit();
+		}
+		catch (Exception e) {
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
+		return epreuve;
+	}
+    
 	
 	
 }
