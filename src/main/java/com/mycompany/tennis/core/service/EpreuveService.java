@@ -1,6 +1,5 @@
 package com.mycompany.tennis.core.service;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -24,22 +23,22 @@ public class EpreuveService {
 		Session session= null;
 		Transaction tx = null;
 		Epreuve epreuve = null;
-		EpreuveFullDto dto=null;
+		EpreuveFullDto epreuveFulldto=null;
 		try {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
 			epreuve=epreuveRepository.getById(id);
-			Hibernate.initialize(epreuve.getTournoi());
-			tx.commit();
-		    dto=new EpreuveFullDto();
-			dto.setId(epreuve.getId());
-			dto.setAnnee(epreuve.getAnnee());
-			dto.setTypeEpreuve(epreuve.getTypeEpreuve());
+			//Hibernate.initialize(epreuve.getTournoi());
+			epreuveFulldto=new EpreuveFullDto();
+			epreuveFulldto.setId(epreuve.getId());
+			epreuveFulldto.setAnnee(epreuve.getAnnee());
+			epreuveFulldto.setTypeEpreuve(epreuve.getTypeEpreuve());
 			TournoiDto tournoiDto=new TournoiDto();
 			tournoiDto.setId(epreuve.getTournoi().getId());
 			tournoiDto.setNom(epreuve.getTournoi().getNom());
 			tournoiDto.setCode(epreuve.getTournoi().getCode());
-			dto.setTournoi(tournoiDto);
+			epreuveFulldto.setTournoi(tournoiDto);
+			tx.commit();
 		}
 		catch (Exception e) {
 			if (tx!=null) {
@@ -52,7 +51,7 @@ public class EpreuveService {
 				session.close();
 			}
 		}
-		return dto;
+		return epreuveFulldto;
 	}
     
     
@@ -67,11 +66,11 @@ public class EpreuveService {
 			session = HibernateUtil.getSessionFactory().getCurrentSession();
 			tx=session.beginTransaction();
 			epreuve=epreuveRepository.getById(id);
-			tx.commit();
 			dto=new EpreuveLightDto();
 			dto.setId(epreuve.getId());
 			dto.setAnnee(epreuve.getAnnee());
 			dto.setTypeEpreuve(epreuve.getTypeEpreuve());
+			tx.commit();
 		}
 		catch (Exception e) {
 			if (tx!=null) {

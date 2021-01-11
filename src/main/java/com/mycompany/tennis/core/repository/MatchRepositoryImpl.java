@@ -8,7 +8,10 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+
 import com.mycompany.tennis.core.DataSourceProvider;
+import com.mycompany.tennis.core.HibernateUtil;
 import com.mycompany.tennis.core.entity.Match;
 
 public class MatchRepositoryImpl {
@@ -55,4 +58,12 @@ public class MatchRepositoryImpl {
             }
         }
     }
+	
+	public Match getById(Long id) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Match match = session.get(Match.class, id);
+		System.out.println("Match lu");
+		
+		return match;
+	}
 }
