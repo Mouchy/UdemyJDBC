@@ -48,6 +48,4 @@ public class Epreuve {
 	public void setTypeEpreuve(Character typeEpreuve) {
 		this.typeEpreuve = typeEpreuve;
 	}
-	
-	
 }
