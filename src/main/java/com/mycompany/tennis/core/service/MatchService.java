@@ -7,6 +7,7 @@ import com.mycompany.tennis.core.HibernateUtil;
 import com.mycompany.tennis.core.dto.EpreuveFullDto;
 import com.mycompany.tennis.core.dto.JoueurDto;
 import com.mycompany.tennis.core.dto.MatchDto;
+import com.mycompany.tennis.core.dto.ScoreFullDto;
 import com.mycompany.tennis.core.dto.TournoiDto;
 import com.mycompany.tennis.core.entity.Match;
 import com.mycompany.tennis.core.repository.MatchRepositoryImpl;
@@ -65,6 +66,17 @@ public class MatchService {
 			epreuveFullDto.setTournoi(tournoiDto);
 			
 			matchDto.setEpreuve(epreuveFullDto);
+			
+			ScoreFullDto scoreFullDto=new ScoreFullDto();
+			scoreFullDto.setId(match.getScore().getId());
+			scoreFullDto.setSet1(match.getScore().getSet1());
+			scoreFullDto.setSet2(match.getScore().getSet2());
+			scoreFullDto.setSet3(match.getScore().getSet3());
+			scoreFullDto.setSet4(match.getScore().getSet4());
+			scoreFullDto.setSet5(match.getScore().getSet5());
+			
+			matchDto.setScoreFullDto(scoreFullDto);
+			scoreFullDto.setMatch(matchDto);
 			
 			tx.commit();
 		}

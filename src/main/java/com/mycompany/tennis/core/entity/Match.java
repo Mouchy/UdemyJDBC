@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 
@@ -26,7 +25,7 @@ public class Match {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ID_EPREUVE")
 	private Epreuve epreuve;
-	@Transient
+	@OneToOne(mappedBy="match")
 	private Score   score;
 	
 	public Long getId() {

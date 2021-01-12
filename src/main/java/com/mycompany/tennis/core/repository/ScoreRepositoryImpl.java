@@ -9,7 +9,11 @@ import java.sql.Types;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
+
 import com.mycompany.tennis.core.DataSourceProvider;
+import com.mycompany.tennis.core.HibernateUtil;
+import com.mycompany.tennis.core.entity.Joueur;
 import com.mycompany.tennis.core.entity.Score;
 
 
@@ -68,5 +72,15 @@ public class ScoreRepositoryImpl {
             }
         }
     }
+	
+	public Score getById(Long id) {
+		Score score=null;
+		Session session=null;
+		session = HibernateUtil.getSessionFactory().getCurrentSession();
+		score = session.get(Score.class, id);
+		System.out.println("Score lu");
+		
+		return score;
+	}
 	
 }
