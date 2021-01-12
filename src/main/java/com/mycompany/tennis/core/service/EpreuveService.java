@@ -1,13 +1,17 @@
 package com.mycompany.tennis.core.service;
 
+import java.util.HashSet;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.mycompany.tennis.core.HibernateUtil;
 import com.mycompany.tennis.core.dto.EpreuveFullDto;
 import com.mycompany.tennis.core.dto.EpreuveLightDto;
+import com.mycompany.tennis.core.dto.JoueurDto;
 import com.mycompany.tennis.core.dto.TournoiDto;
 import com.mycompany.tennis.core.entity.Epreuve;
+import com.mycompany.tennis.core.entity.Joueur;
 import com.mycompany.tennis.core.repository.EpreuveRepositoryImpl;
 
 
@@ -19,7 +23,7 @@ public class EpreuveService {
     }
     
     
-    public EpreuveFullDto getEpreuveAvecTournoi(Long id) {
+    public EpreuveFullDto getEpreuveDetaillee(Long id) {
 		Session session= null;
 		Transaction tx = null;
 		Epreuve epreuve = null;
@@ -38,6 +42,18 @@ public class EpreuveService {
 			tournoiDto.setNom(epreuve.getTournoi().getNom());
 			tournoiDto.setCode(epreuve.getTournoi().getCode());
 			epreuveFulldto.setTournoi(tournoiDto);
+			
+			epreuveFulldto.setParticipants(new HashSet<>());
+			for (Joueur joueur : epreuve.getParticipants()) {
+				final JoueurDto joueurDto = new JoueurDto();
+				joueurDto.setId(joueur.getId());
+				joueurDto.setNom(joueur.getNom());
+				joueurDto.setPrenom(joueur.getPrenom());
+				joueurDto.setSexe(joueur.getSexe());
+				epreuveFulldto.getParticipants().add(joueurDto);
+				
+			}
+			
 			tx.commit();
 		}
 		catch (Exception e) {
