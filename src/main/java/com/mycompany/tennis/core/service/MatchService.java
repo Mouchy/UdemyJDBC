@@ -11,22 +11,68 @@ import com.mycompany.tennis.core.dto.ScoreFullDto;
 import com.mycompany.tennis.core.dto.TournoiDto;
 import com.mycompany.tennis.core.entity.Joueur;
 import com.mycompany.tennis.core.entity.Match;
+import com.mycompany.tennis.core.entity.Score;
+import com.mycompany.tennis.core.repository.EpreuveRepositoryImpl;
+import com.mycompany.tennis.core.repository.JoueurRepositoryImpl;
 import com.mycompany.tennis.core.repository.MatchRepositoryImpl;
 import com.mycompany.tennis.core.repository.ScoreRepositoryImpl;
 
 public class MatchService {
-	private ScoreRepositoryImpl scoreRepository;
-	private MatchRepositoryImpl matchRepository;
+	private ScoreRepositoryImpl   scoreRepository;
+	private MatchRepositoryImpl   matchRepository;
+	private EpreuveRepositoryImpl epreuveRepository;
+	private JoueurRepositoryImpl  joueurRepository;
 	
 	public MatchService() {
-		this.scoreRepository = new ScoreRepositoryImpl();
-		this.matchRepository = new MatchRepositoryImpl();
+		this.scoreRepository   = new ScoreRepositoryImpl();
+		this.matchRepository   = new MatchRepositoryImpl();
+		this.epreuveRepository = new EpreuveRepositoryImpl();
+		this.joueurRepository  = new JoueurRepositoryImpl();
 		
 	}
 	
 	public void enregistrerNouveauMatch(Match match) {
 		matchRepository.create(match);
 		scoreRepository.create(match.getScore());
+	}
+	
+	public void createMatch(MatchDto matchDto) {
+		Session     session = null;
+		Transaction tx      =null;
+		Match       match   =null;
+		try {
+			session = HibernateUtil.getSessionFactory().getCurrentSession();
+			tx=session.beginTransaction();
+			
+			match = new Match();
+			match.setEpreuve(epreuveRepository.getById(matchDto.getEpreuve().getId()));
+			match.setVainqueur(joueurRepository.getById(matchDto.getVainqueur().getId()));
+			match.setFinaliste(joueurRepository.getById(matchDto.getFinaliste().getId()));
+			Score score=new Score();
+			score.setMatch(match);
+			match.setScore(score);
+			score.setSet1(matchDto.getScoreFullDto().getSet1());
+			score.setSet1(matchDto.getScoreFullDto().getSet1());
+			score.setSet1(matchDto.getScoreFullDto().getSet1());
+			score.setSet1(matchDto.getScoreFullDto().getSet1());
+			score.setSet1(matchDto.getScoreFullDto().getSet1());
+			
+			matchRepository.create(match);
+			
+			tx.commit();
+		}
+		catch (Exception e) {
+			if (tx!=null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			if (session!=null) {
+				session.close();
+			}
+		}
+		
 	}
 	
 	public void tapisVert(Long id) {

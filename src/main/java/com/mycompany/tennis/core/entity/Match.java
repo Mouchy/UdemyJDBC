@@ -1,5 +1,6 @@
 package com.mycompany.tennis.core.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class Match {
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ID_EPREUVE")
 	private Epreuve epreuve;
-	@OneToOne(mappedBy="match", fetch=FetchType.LAZY)
+	@OneToOne(mappedBy="match", fetch=FetchType.LAZY, cascade=CascadeType.PERSIST)
 	private Score   score;
 	
 	public Long getId() {
